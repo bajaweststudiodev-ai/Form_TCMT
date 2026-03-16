@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción - Team Cota's Muay Thai</title>
-    <link rel="stylesheet" href="Css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -70,9 +70,6 @@
             <label>Correo Electrónico*</label>
             <input type="email" id="correo" required>   
 
-            <label>Teléfono Móvil*</label>
-            <input type="tel" id="telefono" required pattern="[0-9]{10}" placeholder="10 dígitos">
-
             <button type="button" class="btn-next" onclick="validarYAvanzar(1, 2)">Siguiente ➔</button>
         </div>
 <div class="form-step" id="paso2">
@@ -98,48 +95,6 @@
             <div class="btn-group">
                 <button type="button" class="btn-prev" onclick="retroceder(1)">🡨 Atrás</button>
                 <button type="button" class="btn-next" onclick="validarYAvanzar(2, 3)">Siguiente ➔</button>
-            </div>
-        </div>
-
-        <div class="form-step" id="paso3">
-            <h3>3. Ficha Médica</h3>
-            
-            <label>Sistema de Salud*</label>
-            <select id="sistemaSalud" required>
-                <option value="" disabled selected>Seleccione uno</option>
-                <option value="issstecali">ISSSTECALI</option>
-                <option value="issste">ISSSTE</option>
-                <option value="imss">IMSS</option>
-                <option value="privado">Seguro Privado</option>
-                <option value="ninguno">No tengo</option>
-            </select>
-            
-            <label>Consultorio o Médico Tratante</label>
-            <input type="text" id="consultorio" placeholder="Nombre del doctor o clínica (Opcional)">
-
-            <label>Grupo Sanguíneo</label>
-            <select id="grupoSangre">
-                <option value="No lo sé">No lo sé</option>
-                <option value="O+">O+</option><option value="O-">O-</option>
-                <option value="A+">A+</option><option value="A-">A-</option>
-                <option value="B+">B+</option><option value="B-">B-</option>
-                <option value="AB+">AB+</option><option value="AB-">AB-</option>
-            </select>
-
-            <label>Alergias</label>
-            <input type="text" id="alergias" placeholder="Especifique o deje en blanco">
-
-            <label>Padecimientos, cirugías o medicamentos*</label>
-            <textarea id="padecimientos" rows="2" required placeholder="Escriba 'Ninguno' si no aplica"></textarea>
-
-            <label>Contacto de Emergencia (Nombres y Apellidos)*</label>
-            <input type="text" id="emergenciaNombre" required>
-            <label>Teléfono de Emergencia*</label>
-            <input type="tel" id="emergenciaTelefono" required pattern="[0-9]{10}">
-
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="retroceder(2)">🡨 Atrás</button>
-                <button type="button" class="btn-next" onclick="validarYAvanzar(3, 4)">Siguiente ➔</button>
             </div>
         </div>
 
@@ -218,6 +173,6 @@
         </div>
     </form>
 </div>
-<script src="Js/app.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
