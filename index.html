@@ -1,190 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscripción - Team Cota's Muay Thai</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscripción - Team Cota's Muay Thai</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<!-- OCR -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
 </head>
+
 <body>
+
 <div class="form-container">
+
 <div class="header">
-
 <img src="assets/img/logo.png" class="logo-header">
-
 <h2>Ficha de Inscripción</h2>
 
 <div class="progress-bar">
 <div class="progress" id="progress"></div>
 </div>
+</div>
+
+<form id="registroForm" novalidate>
+
+<!-- ================= PASO 1 ================= -->
+<div class="form-step active" id="paso1">
+
+<h3>1. Datos Personales</h3>
+
+<!-- INE -->
+<div class="ine-scanner">
+<label for="ineInput" class="btn-ine">🆔 Escanear INE</label>
+<input type="file" id="ineInput" accept="image/*" capture="environment" style="display:none">
+<p id="ineStatus" class="status-msg"></p>
+</div>
+
+<!-- FOTO -->
+<div class="foto-upload">
+
+<label for="fotoCara" class="btn-foto">📸 Tomar Foto</label>
+
+<input type="file" id="fotoCara" accept="image/jpeg, image/png, image/webp" style="display:none" required>
+
+<div id="previewContainer" style="display:none; margin-top:15px; text-align:center;">
+<img id="fotoPreview" style="width:130px;height:130px;border-radius:50%;object-fit:cover;">
+</div>
+
+<p id="fotoMensaje"></p>
 
 </div>
 
-    <form id="registroForm" novalidate>
-        
-        <div class="form-step active" id="paso1">
-            <h3>1. Datos Personales</h3>
-            
-            <div class="ine-scanner">
-                <label for="ineInput" class="btn-ine">🆔 Autocompletar con INE (Opcional)</label>
-                <input 
-type="file"
-id="fotoCara"
-accept="image/*"
-capture="user"
-style="display:none"
-required>
-                <p id="ineStatus" class="status-msg"></p>
-            </div>
+<!-- NOMBRE -->
+<div class="row">
+<div class="col">
+<label>Nombres*</label>
+<input type="text" id="nombres" required>
+</div>
 
-            <div class="foto-upload">
-                <label for="fotoCara" class="btn-foto">
-📸 Tomar Foto o Subir Archivo
-</label>
-                <input type="file" id="fotoCara" accept="image/jpeg, image/png, image/webp" style="display: none;" required>
-                <p style="font-size:12px;color:#666;margin-top:5px">
-Toma la foto de frente, sin gorra ni lentes para mejor identificación.
-</p>
-                <div id="previewContainer" style="display: none; margin-top: 15px;">
-                    <p style="font-size: 0.8em; color: #666; margin-bottom: 5px;">Ajuste automático de perfil:</p>
-                    <img id="fotoPreview" src="" alt="Previsualización" style="width: 130px; height: 130px; object-fit: cover; border-radius: 50%; border: 4px solid #d92525; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                    
-                    <label class="checkbox-container" style="justify-content: center; margin-top: 15px; background: #fff3cd; padding: 10px; border-radius: 6px;">
-                        <input type="checkbox" id="confirmaRostro" required>
-                        <span style="color: #856404; font-weight: bold;">Confirmo que es una foto frontal y clara de mi rostro.*</span>
-                    </label>
-                </div>
-                <p id="fotoMensaje" class="status-msg"></p>
-            </div>
+<div class="col">
+<label>Apellidos*</label>
+<input type="text" id="apellidos" required>
+</div>
+</div>
 
-            <div class="row">
-                <div class="col"><label>Nombres*</label><input type="text" id="nombres" required></div>
-                <div class="col"><label>Apellidos*</label><input type="text" id="apellidos" required></div>
-            </div>
-            <label>Tipo de Membresía que deseas:*</label>
-            <select id="tipoMembresia" required>
-                <option value="" disabled selected>Seleccione una opción</option>
-                <option value="dia">Pase por Día (Eventual)</option>
-                <option value="semana">Pase por Semana (Eventual)</option>
-                <option value="mes">Inscripción / Mensualidad Regular</option>
-            </select>
-            <label>Fecha de Nacimiento*</label>
-            <input type="date" id="fechaNacimiento" required>
+<!-- MEMBRESIA -->
+<label>Membresía*</label>
+<select id="tipoMembresia" required>
+<option value="" disabled selected>Selecciona</option>
+<option value="dia">Día</option>
+<option value="semana">Semana</option>
+<option value="mes">Mensual</option>
+</select>
 
-<div id="seccionTutor" class="oculto seccion-resaltada">
-                <h4 style="color: #d92525; margin-top:0;">⚠️ Menor de edad detectado</h4>
-                <label>Nombre Completo del Tutor*</label>
-                <input type="text" id="nombreTutor">
-                <label>Teléfono del Tutor*</label>
-                <input type="tel" id="telefonoTutor" pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 dígitos numéricos">
-            </div>
+<!-- FECHA -->
+<label>Fecha de nacimiento*</label>
+<input type="date" id="fechaNacimiento" required>
 
-            <label>Teléfono Móvil*</label>
-            <input type="tel" id="telefono" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 dígitos numéricos">
+<!-- TUTOR -->
+<div id="seccionTutor" class="oculto">
+<label>Nombre del tutor*</label>
+<input type="text" id="nombreTutor">
 
-            <label>Correo Electrónico*</label>
-            <input type="email" id="correo" required>   
+<label>Teléfono tutor*</label>
+<input type="tel" id="telefonoTutor">
+</div>
 
-            <button type="button" class="btn-next" onclick="validarYAvanzar(1, 2)">Siguiente ➔</button>
-        </div>
+<label>Teléfono*</label>
+<input type="tel" id="telefono" required pattern="[0-9]{10}">
+
+<label>Correo*</label>
+<input type="email" id="correo" required>
+
+<button type="button" onclick="validarYAvanzar(1,2)">Siguiente ➔</button>
+
+</div>
+
+<!-- ================= PASO 2 ================= -->
 <div class="form-step" id="paso2">
-            <h3>2. Dirección</h3>
-            
-            <label>Código Postal*</label>
-            <input type="number" id="cp" required placeholder="Ej. 22800">
 
-            <label>Ciudad / Municipio</label>
-            <input type="text" id="ciudad" readonly class="readonly-input">
+<h3>2. Dirección</h3>
 
-            <label>Colonia*</label>
-            <select id="colonia" required>
-                <option value="" disabled selected>Ingrese su CP primero</option>
-            </select>
+<label>CP*</label>
+<input type="text" id="cp" required maxlength="5" pattern="[0-9]{5}">
 
-            <label>Calle/Avenida*</label>
-            <input type="text" id="calle" required>
+<label>Ciudad</label>
+<input type="text" id="ciudad" readonly>
 
-            <label>Número Ext/Int*</label>
-            <input type="text" id="numero" required>
+<label>Colonia*</label>
+<select id="colonia" required>
+<option value="">Ingrese CP</option>
+</select>
 
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="retroceder(1)">🡨 Atrás</button>
-                <button type="button" class="btn-next" onclick="validarYAvanzar(2, 3)">Siguiente ➔</button>
-            </div>
-        </div>
+<label>Calle*</label>
+<input type="text" id="calle" required>
 
-        <div class="form-step" id="paso3">
-            <h3>3. Ficha Médica</h3>
-            
-            <label>Sistema de Salud*</label>
-            <select id="sistemaSalud" required>
-                <option value="" disabled selected>Seleccione uno</option>
-                <option value="issstecali">ISSSTECALI</option>
-                <option value="issste">ISSSTE</option>
-                <option value="imss">IMSS</option>
-                <option value="privado">Seguro Privado</option>
-                <option value="ninguno">No tengo</option>
-            </select>
+<label>Número*</label>
+<input type="text" id="numero" required>
 
-            <label>Grupo Sanguíneo</label>
-            <select id="grupoSangre">
-                <option value="No lo sé">No lo sé</option>
-                <option value="O+">O+</option><option value="O-">O-</option>
-                <option value="A+">A+</option><option value="A-">A-</option>
-                <option value="B+">B+</option><option value="B-">B-</option>
-                <option value="AB+">AB+</option><option value="AB-">AB-</option>
-            </select>
+<button type="button" onclick="retroceder(1)">Atrás</button>
+<button type="button" onclick="validarYAvanzar(2,3)">Siguiente</button>
 
-            <label>Alergias</label>
-            <input type="text" id="alergias" placeholder="Especifique o deje en blanco">
-
-            <label>Padecimientos, cirugías o medicamentos*</label>
-            <textarea id="padecimientos" rows="2" required placeholder="Escriba 'Ninguno' si no aplica"></textarea>
-
-            <label>Contacto de Emergencia (Nombres y Apellidos)*</label>
-            <input type="text" id="emergenciaNombre" required>
-            <label>Teléfono de Emergencia*</label>
-            <input type="tel" id="emergenciaTelefono" required pattern="[0-9]{10}">
-
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="retroceder(2)">🡨 Atrás</button>
-                <button type="button" class="btn-next" onclick="validarYAvanzar(3, 4)">Siguiente ➔</button>
-            </div>
-        </div>
-
-       <div class="form-step" id="paso4">
-    <h3>4. Liberación de Responsabilidad</h3>
-    
-    <div class="texto-legal" id="contenedorContrato">
-        Generando contrato...
-    </div>
-
-    <label class="checkbox-container">
-        <input type="checkbox" id="aceptoFotos">
-        <span>Doy mi consentimiento para que Team Cota's Muay Thai utilice fotografías y videos donde aparezca durante los entrenamientos para fines de publicidad en redes sociales.</span>
-    </label>        
-
-            <label class="checkbox-container">
-                <input type="checkbox" id="aceptoTerminos" required>
-                <span>He leído y acepto los términos de liberación de responsabilidad.*</span>
-            </label>
-            <label class="checkbox-container">
-                <input type="checkbox" id="aceptoFotos">
-                <span>Doy consentimiento para uso de fotos en redes sociales.</span>
-            </label>
-
-            <label style="margin-top: 15px;">Firma del Participante o Tutor:*</label>
-            <canvas id="pizarraFirma" width="400" height="200"></canvas>
-            <button type="button" class="btn-borrar" onclick="limpiarFirma()">Borrar Firma</button>
-
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="retroceder(3)">🡨 Atrás</button>
-                <button type="button" class="btn-submit" onclick="enviarFormulario()">Enviar Ficha ✅</button>
-            </div>
-        </div>
-    </form>
 </div>
+
+<!-- ================= PASO 3 ================= -->
+<div class="form-step" id="paso3">
+
+<h3>3. Médico</h3>
+
+<label>Seguro*</label>
+<select id="sistemaSalud" required>
+<option value="">Seleccione</option>
+<option>IMSS</option>
+<option>ISSSTE</option>
+<option>Privado</option>
+<option>Ninguno</option>
+</select>
+
+<label>Padecimientos*</label>
+<textarea id="padecimientos" required></textarea>
+
+<label>Contacto emergencia*</label>
+<input type="text" id="emergenciaNombre" required>
+
+<label>Teléfono emergencia*</label>
+<input type="tel" id="emergenciaTelefono" required>
+
+<button type="button" onclick="retroceder(2)">Atrás</button>
+<button type="button" onclick="validarYAvanzar(3,4)">Siguiente</button>
+
+</div>
+
+<!-- ================= PASO 4 ================= -->
+<div class="form-step" id="paso4">
+
+<h3>4. Contrato</h3>
+
+<div id="contenedorContrato"></div>
+
+<label>
+<input type="checkbox" id="aceptoTerminos" required>
+Acepto términos
+</label>
+
+<canvas id="pizarraFirma" width="300" height="150"></canvas>
+
+<button type="button" onclick="limpiarFirma()">Borrar firma</button>
+
+<button type="button" onclick="retroceder(3)">Atrás</button>
+<button type="button" onclick="enviarFormulario()">Enviar</button>
+
+</div>
+
+</form>
+</div>
+
 <script src="js/app.js"></script>
+
 </body>
 </html>
