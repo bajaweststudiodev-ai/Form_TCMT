@@ -31,44 +31,47 @@ function validarYAvanzar(pasoActual, pasoSiguiente) {
     window.scrollTo(0, 0);
 }
 // --- PREVISUALIZACIÓN Y VALIDACIÓN ANTI-BASURA DE FOTO ---
-document.getElementById('fotoCara').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const mensaje = document.getElementById('fotoMensaje');
-    const previewContainer = document.getElementById('previewContainer');
-    const checkboxRostro = document.getElementById('confirmaRostro');
+document.getElementById("fotoCara").addEventListener("change",function(e){
 
-    if (!file) return;
+const file = e.target.files[0];
+if(!file) return;
 
-    // 1. Validar que sea una imagen real
-    if (!file.type.startsWith('image/')) {
-        mensaje.innerText = "❌ Por favor, sube un formato de imagen válido (JPG o PNG).";
-        mensaje.style.color = "red";
-        this.value = ''; // Borra el archivo malo
-        previewContainer.style.display = 'none';
-        return;
-    }
+const mensaje = document.getElementById("fotoMensaje");
+const preview = document.getElementById("fotoPreview");
+const contenedor = document.getElementById("previewContainer");
 
-    // 2. Validar el peso (Máximo 5MB para no saturar tu base de datos)
-    if (file.size > 5 * 1024 * 1024) {
-        mensaje.innerText = "❌ La imagen es demasiado pesada. Máximo 5MB.";
-        mensaje.style.color = "red";
-        this.value = ''; 
-        previewContainer.style.display = 'none';
-        return;
-    }
+if(!file.type.startsWith("image/")){
 
-    // 3. Mostrar la foto y el candado de seguridad
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('fotoPreview').src = e.target.result;
-        previewContainer.style.display = 'block';
-        mensaje.innerText = "✅ Imagen cargada.";
-        mensaje.style.color = "green";
-        
-        // Desmarcar el checkbox por si están subiendo una foto nueva
-        checkboxRostro.checked = false; 
-    }
-    reader.readAsDataURL(file);
+mensaje.innerText="❌ Debe ser una imagen";
+mensaje.style.color="red";
+this.value="";
+return;
+
+}
+
+if(file.size > 5 * 1024 * 1024){
+
+mensaje.innerText="❌ Imagen demasiado pesada (máx 5MB)";
+mensaje.style.color="red";
+this.value="";
+return;
+
+}
+
+const reader = new FileReader();
+
+reader.onload = function(ev){
+
+preview.src = ev.target.result;
+contenedor.style.display = "block";
+
+mensaje.innerText="✅ Imagen cargada correctamente";
+mensaje.style.color="green";
+
+}
+
+reader.readAsDataURL(file);
+
 });
 
 function retroceder(pasoAnterior) {
@@ -208,37 +211,75 @@ document.getElementById('cp').addEventListener('input', async function() {
 });
 
 // --- ESCÁNER DE INE (OCR con Tesseract.js) ---
-document.getElementById('ineInput').addEventListener('change', async function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+document.getElementById('ineInput').addEventListener('change', async function(e){
 
-    const statusMsg = document.getElementById('ineStatus');
-    statusMsg.innerText = "⏳ Analizando credencial... (puede tardar unos segundos)";
-    
-    try {
-        // Ejecuta el OCR en la imagen
-        const result = await Tesseract.recognize(file, 'spa');
-        const text = result.data.text.toUpperCase();
-        console.log("Texto extraído:", text);
+const file = e.target.files[0];
+if(!file) return;
 
-        // Lógica básica para buscar Nombres (La INE mexicana tiene NOMBRE, DOMICILIO, etc.)
-        // Nota: El OCR puede tener errores de lectura dependiendo de la luz.
-        let lineas = text.split('\n').filter(l => l.trim().length > 2);
-        
-        // Busca la palabra NOMBRE y toma las siguientes líneas
-        let indiceNombre = lineas.findIndex(l => l.includes('NOMBRE'));
-        if(indiceNombre !== -1 && lineas.length > indiceNombre + 2) {
-            document.getElementById('apellidos').value = lineas[indiceNombre + 1].trim(); // Apellido Paterno/Materno
-            document.getElementById('nombres').value = lineas[indiceNombre + 2].trim();   // Nombre(s)
-            statusMsg.innerText = "✅ Datos extraídos (Por favor verifica que sean correctos)";
-            statusMsg.style.color = "green";
-        } else {
-            statusMsg.innerText = "⚠️ No se pudo leer bien el nombre. Intenta con más luz o llena a mano.";
-            statusMsg.style.color = "red";
-        }
-    } catch (error) {
-        statusMsg.innerText = "❌ Error al leer la imagen.";
-    }
+const status = document.getElementById("ineStatus");
+
+status.innerText = "⏳ Leyendo credencial...";
+status.style.color = "#0056b3";
+
+try{
+
+const result = await Tesseract.recognize(
+file,
+"spa",
+{
+logger: m => console.log(m)
+}
+);
+
+let texto = result.data.text.toUpperCase();
+
+texto = texto
+.replace(/[^A-ZÑ\s]/g," ")
+.replace(/\s+/g," ");
+
+console.log(texto);
+
+let palabras = texto.split(" ");
+
+let nombres = [];
+let apellidos = [];
+
+for(let i=0;i<palabras.length;i++){
+
+if(palabras[i].length > 3){
+
+if(apellidos.length < 2){
+apellidos.push(palabras[i]);
+}else if(nombres.length < 2){
+nombres.push(palabras[i]);
+}
+
+}
+
+}
+
+if(apellidos.length > 0){
+
+document.getElementById("apellidos").value = apellidos.join(" ");
+document.getElementById("nombres").value = nombres.join(" ");
+
+status.innerText = "✅ Datos detectados automáticamente";
+status.style.color = "green";
+
+}else{
+
+status.innerText = "⚠️ No se pudo leer bien la INE. Intenta con más luz.";
+status.style.color = "orange";
+
+}
+
+}catch(err){
+
+status.innerText = "❌ Error al leer la imagen.";
+status.style.color = "red";
+
+}
+
 });
 
 // --- LÓGICA DE LA PIZARRA DE FIRMA ---
