@@ -70,6 +70,15 @@ document.getElementById('fotoCara').addEventListener('change', function(e) {
     }
     reader.readAsDataURL(file);
 });
+
+function retroceder(pasoAnterior) {
+    document.querySelector('.form-step.active').classList.remove('active');
+    document.getElementById(`paso${pasoAnterior}`).classList.add('active');
+    document.getElementById('progress').style.width = `${pasoAnterior * 25}%`;
+    window.scrollTo(0,0);
+}
+
+
 // --- GENERADOR DE CONTRATO DINÁMICO Y BLINDADO ---
 function generarContrato() {
     // 1. Recolectar datos del usuario
